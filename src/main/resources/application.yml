@@ -1,0 +1,39 @@
+logging:
+  level:
+    org.springframework: INFO
+
+spring:
+  profiles:
+    active: dev
+  main:
+    banner-mode: "off"
+---
+spring:
+  profiles: dev
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        search:
+          default:
+            indexBase: data/index
+---
+spring:
+  profiles: prod
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        search:
+          default:
+            indexmanager: elasticsearch
+            elasticsearch:
+              host: http://elasticsearc-service:9200
+              index_schema_management_strategy: create
+              required_index_status: yellow
