@@ -18,25 +18,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-@RestController()
+@RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("api/v1")
-class ProductController {
+@RequestMapping("api/v1/products")
+class SearchController {
     private final SearchService searchService;
     private final ProductMapper productMapper;
 
-    @GetMapping("/search")
+
+    @GetMapping
     @ApiImplicitParams({
         @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "the page number (0..N)"),
         @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "number of records per page."),
     })
     public Page<ProductResponse> searchProducts(
-        @ApiParam(value = "product name (e.g. camera*)") @RequestParam String name,
+        @ApiParam(value = "product name (e.g. iphone)", required = true) @RequestParam String name,
         @ApiParam(value = "product category") @RequestParam Optional<String> category,
         @PageableDefault Pageable page) {
         return searchService.getProductByName(name, category, page).map(productMapper::toResponse);
     }
-
-
 }

@@ -1,6 +1,5 @@
 package de.eblaas.products.configuration;
 
-import com.google.common.base.Predicate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,18 +17,19 @@ public class SwaggerConfig {
 
     @Bean
     public Docket postsApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
-            .apiInfo(apiInfo()).select().paths(postPaths()).build();
-    }
-
-    private Predicate<String> postPaths() {
-        return or(regex("/api/v1/search"));
+        return new Docket(DocumentationType.SWAGGER_2)
+            .groupName("api")
+            .apiInfo(apiInfo())
+            .select().paths(or(regex("/api/v1/products/*")))
+            .build();
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Product service API")
+        return new ApiInfoBuilder()
+            .title("Product service API")
             .description("Product service API reference for developers")
-            .version("1.0").build();
+            .version("1.0")
+            .build();
     }
 
 }

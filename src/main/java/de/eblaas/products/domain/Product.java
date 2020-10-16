@@ -1,5 +1,6 @@
 package de.eblaas.products.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 @Setter
 @Entity
 @ToString
+@EqualsAndHashCode
 @Indexed(index = "idx_product")
 public class Product {
     @Id
