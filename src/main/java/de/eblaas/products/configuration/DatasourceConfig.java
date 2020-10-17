@@ -1,6 +1,6 @@
 package de.eblaas.products.configuration;
 
-import de.eblaas.products.controller.mapper.ProductMapper;
+import de.eblaas.products.controller.dto.ProductMapper;
 import de.eblaas.products.datasource.ProductDatasource;
 import de.eblaas.products.datasource.impl.FileImportDatasource;
 import de.eblaas.products.datasource.impl.HttpProductDatasource;

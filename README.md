@@ -1,9 +1,8 @@
 # Product service
+The servie provides an endpoint that accepts product name and category as a search options.
 
-### API Dokumentation
-http://localhost:8080/swagger-ui.html
 
-### How to run application
+### Run application
 ```
 ./gradlew bootRun 
 ```
@@ -14,6 +13,15 @@ http://localhost:8080/swagger-ui.html
 docker run -p 8080:8080 product-service
 ```
 
-### Profiles
-* `dev` (default) : uses in-memory db and lucene  
-* `prod` : uses postgresql and elasticsearch ( -e spring_profiles_active=prod)
+### API Dokumentation
+[Swagger](http://localhost:8080/swagger-ui.html "http://localhost:8080/swagger-ui.html")
+
+### Scalability
+
+* Profile `dev` : (default) uses in-memory db and lucene (standalone only)  
+* Profile `prod` : uses postgresql and elasticsearch (multiple instances) 
+
+```
+./gradlew -Dspring.profiles.active=prod bootRun
+docker run -p 8080:8080 -e spring_profiles_active=prod product-service
+```

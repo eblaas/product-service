@@ -1,59 +1,72 @@
 package de.eblaas.products.datasource.impl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import de.eblaas.products.datasource.ProductDatasource;
+import de.eblaas.products.domain.Category;
 import de.eblaas.products.domain.Product;
 import io.reactivex.Flowable;
 import io.reactivex.schedulers.Schedulers;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
+/**
+ * Reads a csv file [id,name,category,storeUrl] and publishes to product stream.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class FileImportDatasource implements ProductDatasource {
 
-    private final Resource resource;
+  private final Resource resource;
 
-    private Flowable<String> loadFileContent(Resource resource) {
+  private Flowable<String> loadFileContent(Resource resource) {
 
-        return Flowable.using(
-            () -> new BufferedReader(new FileReader(resource.getFile())),
-            reader -> Flowable.fromIterable(() -> reader.lines().iterator()),
-            BufferedReader::close
-        );
+    return Flowable.using(
+        () -> new BufferedReader(new FileReader(resource.getFile())),
+        reader -> Flowable.fromIterable(() -> reader.lines().iterator()),
+        BufferedReader::close
+    );
+  }
+
+  private Flowable<Product> parseProduct(String[] parts) {
+    try {
+      return Flowable.just(
+          Product.builder()
+                 .id(checkNotNull(parts[0], "product id must not be null"))
+                 .name(checkNotNull(parts[1], "product name must not be null"))
+                 .category(toCategory(checkNotNull(parts[2], "product category must not be null")))
+                 .storeUrl(checkNotNull(parts[3], "store url must not be null"))
+                 .rating(0)
+                 .build());
+    } catch (Exception e) {
+      log.warn("Invalid csv entry. error={}, data={}", e.getMessage(), parts);
+      return Flowable.empty();
     }
+  }
 
-    private Flowable<Product> parseProduct(String[] parts) {
-        try {
-            var product = new Product();
-            product.setId(checkNotNull(parts[0], "product id must not be null"));
-            product.setName(checkNotNull(parts[1], "product name must not be null"));
-            product.setCategory(checkNotNull(parts[2], "product category must not be null"));
-            product.setRating(0);
-            return Flowable.just(product);
-        } catch (Exception e) {
-            return Flowable.error(new IllegalAccessException(
-                String.format("Invalid csv entry. error=%s, data=%s", e.getMessage(), parts)));
-        }
+  private Category toCategory(String category) {
+    try {
+      return Category.valueOf(category);
+    } catch (IllegalArgumentException e) {
+      return Category.other;
     }
+  }
 
 
-    @Override
-    public Flowable<Product> getProductStream() {
-        return Flowable.just(resource)
-            .observeOn(Schedulers.io())
-            .flatMap(this::loadFileContent)
-            .map(line -> line.split(";"))
-            .flatMap(this::parseProduct);
-    }
+  @Override
+  public Flowable<Product> getProductStream() {
+    return Flowable.just(resource)
+                   .observeOn(Schedulers.io())
+                   .flatMap(this::loadFileContent)
+                   .map(line -> line.split(";"))
+                   .flatMap(this::parseProduct);
+  }
 
-    @Override
-    public String type() {
-        return "FileBatchDatasource";
-    }
+  @Override
+  public String type() {
+    return "FileBatchDatasource";
+  }
 }
