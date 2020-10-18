@@ -17,7 +17,7 @@ class RatingServiceTest {
   @Test
   void testIfRatingServiceUpdatesProducts() {
 
-    var products = List.of(new Product("1", "mock", Category.tv, -1, "https://mock"));
+    var products = List.of(new Product("1", "mock", Category.tv, 0, "mock", "https://mock"));
 
     var productService = Mockito.mock(ProductService.class);
     var ratingService = new RatingService(productService);

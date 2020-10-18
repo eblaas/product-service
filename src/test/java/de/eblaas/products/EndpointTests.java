@@ -35,7 +35,7 @@ class EndpointTests {
   @Test
   public void datasourceEndpointTest() {
 
-    ProductBody data = new ProductBody("123", "testproduct", Category.other, "https://mock");
+    ProductBody data = new ProductBody("123", "testproduct", Category.other, "mock", "https://mock");
 
     this.restTemplate.put(getServerUriBuilder().toUriString(), data);
 

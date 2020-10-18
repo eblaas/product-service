@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
@@ -23,5 +24,7 @@ public class ProductBody {
   @NotNull
   private Category category;
   @NotBlank
+  private String seller;
+  @URL
   private String storeUrl;
 }

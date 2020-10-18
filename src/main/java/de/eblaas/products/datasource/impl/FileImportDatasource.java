@@ -38,7 +38,8 @@ public class FileImportDatasource implements ProductDatasource {
                  .id(checkNotNull(parts[0], "product id must not be null"))
                  .name(checkNotNull(parts[1], "product name must not be null"))
                  .category(toCategory(checkNotNull(parts[2], "product category must not be null")))
-                 .storeUrl(checkNotNull(parts[3], "store url must not be null"))
+                 .seller(checkNotNull(parts[3], "seller must not be null"))
+                 .storeUrl(checkNotNull(parts[4], "store url must not be null"))
                  .rating(0)
                  .build());
     } catch (Exception e) {

@@ -14,5 +14,6 @@ public class ProductResponse {
   private String name;
   private Category category;
   private int rating;
+  private String seller;
   private String storeUrl;
 }

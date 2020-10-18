@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.SortableField;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
@@ -33,6 +35,7 @@ public class Product {
   public static final String FIELD_NAME = "name";
   public static final String FIELD_CATEGORY = "category";
   public static final String FIELD_RATING = "rating";
+  public static final String FIELD_SELLER = "seller";
   public static final String FIELD_STORE_URL = "store_url";
 
   @Id
@@ -48,11 +51,16 @@ public class Product {
   @Field(store = Store.YES, name = FIELD_CATEGORY)
   private Category category;
 
+  @Min(0)
   @Field(store = Store.YES, name = FIELD_RATING)
   @SortableField
   private int rating;
 
   @NotBlank
+  @Field(store = Store.YES, name = FIELD_SELLER)
+  private String seller;
+
+  @URL
   @Field(store = Store.YES, index = Index.NO, name = FIELD_STORE_URL)
   private String storeUrl;
 }

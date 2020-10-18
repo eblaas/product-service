@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The rating service listens on {@link DataImportEvent} events and populates the rating field. The sample
- * ratingFunction generates a random rating value [0..5] simulating a delay of 100 ms.
+ * ratingFunction generates a random rating value [1..5] simulating a delay of 100 ms.
  */
 @Component
 @Slf4j
@@ -28,7 +28,7 @@ public class RatingService implements ApplicationListener<DataImportEvent> {
   private final Function<Product, Flowable<Integer>> ratingFunction = MOCK_RATING_FUNCTION_WITH_DELAY;
 
   private static Function<Product, Flowable<Integer>> MOCK_RATING_FUNCTION_WITH_DELAY =
-      product -> Flowable.just(new Random().nextInt(6))
+      product -> Flowable.just(new Random().nextInt(5) + 1)
                          .delay(100, TimeUnit.MILLISECONDS);
 
 

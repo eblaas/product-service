@@ -19,7 +19,7 @@ class DatasourceCollectorTest {
   @Test
   void testIfCollectorSavesProductsAndPublishEvents() {
 
-    var product = new Product("1", "mock", Category.tv, 2, "https://mock");
+    var product = new Product("1", "mock product", Category.other, 2, "mock", "https://mock");
 
     var productService = Mockito.mock(ProductService.class);
     var eventPublisher = Mockito.mock(ApplicationEventPublisher.class);
